@@ -12,6 +12,8 @@ import { ping } from "./commands/ping.js";
 import { clear } from "./commands/clear.js";
 import { rule } from "./commands/rule.js";
 import { apply } from "./commands/apply.js";
+import { omikuji } from "./commands/omikuji.js";
+import { quest } from "./commands/quest.js";
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds],
@@ -19,7 +21,7 @@ const client = new Client({
 
 // コマンド一覧を保持するコレクション
 const commands = new Collection<string, Command>();
-[ping, clear, rule, apply].forEach((cmd) => {
+[ping, clear, rule, apply, omikuji, quest].forEach((cmd) => {
   commands.set(cmd.data.name, cmd);
 });
 

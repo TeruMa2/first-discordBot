@@ -4,8 +4,10 @@ import { ping } from "./commands/ping.js";
 import { clear } from "./commands/clear.js";
 import { rule } from "./commands/rule.js";
 import { apply } from "./commands/apply.js";
+import { omikuji } from "./commands/omikuji.js";
+import { quest } from "./commands/quest.js";
 
-const commandList = [ping, clear, rule, apply];
+const commandList = [ping, clear, rule, apply, omikuji, quest];
 const commands = commandList.map((cmd) => cmd.data.toJSON());
 
 const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
