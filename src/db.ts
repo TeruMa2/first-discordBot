@@ -25,7 +25,7 @@ export function initDatabase(): void {
 
   // 2. セキュリティ検知ログテーブル
   db.exec(`
-    CREATE TABLE IF NOT EXISTS security logs (
+    CREATE TABLE IF NOT EXISTS security_logs (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id TEXT NOT NULL,
       username TEXT NOT NULL,
