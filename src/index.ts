@@ -14,9 +14,16 @@ import { rule } from "./commands/rule.js";
 import { apply } from "./commands/apply.js";
 import { omikuji } from "./commands/omikuji.js";
 import { quest } from "./commands/quest.js";
+import { startScheduler } from "./scheduler.js";
+import { startSecurityMonitor } from "./security.js";
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+  ],
 });
 
 // コマンド一覧を保持するコレクション
@@ -27,6 +34,8 @@ const commands = new Collection<string, Command>();
 
 client.once(Events.ClientReady, (readyClient) => {
   console.log(`🤖 Logged in as ${readyClient.user.tag}!`);
+  startScheduler(readyClient);
+  startSecurityMonitor(readyClient);
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
