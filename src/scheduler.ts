@@ -1,5 +1,6 @@
 import cron from "node-cron";
 import { Client, EmbedBuilder, TextChannel } from "discord.js";
+import { getSecurityStats } from "./db.js";
 
 /**
  * 定期実行タスク（スケジューラー）を初期化して起動する関数
@@ -36,6 +37,7 @@ export function startScheduler(client: Client): void {
           );
           return;
         }
+        const stats = getSecurityStats();
 
         // 通知用のEmbedを作成
         const embed = new EmbedBuilder()
@@ -44,13 +46,24 @@ export function startScheduler(client: Client): void {
           .addFields(
             // process.uptime()はBotが起動してからの秒数
             {
-              name: "連続稼働時間",
-              value: `${Math.floor(process.uptime())} 秒`,
+              name: "🟢 連続稼働時間",
+              value: `${Math.floor(process.uptime() / 60)} 分`,
               inline: true,
             },
             {
-              name: "サーバー時刻",
-              value: new Date().toLocaleString("ja-JP"),
+              name: "🛡️ 累計検知件数",
+              value: `**${stats.total} 件**`,
+              inline: true,
+            },
+            { name: "\u200B", value: "\u200B", inline: true }, // レイアウト調整用の空白フィールド
+            {
+              name: "🚫 招待リンク削除",
+              value: `${stats.inviteBlocks} 件`,
+              inline: true,
+            },
+            {
+              name: "⚠️ 新規アカウント警戒",
+              value: `${stats.newAccountWarns} 件`,
               inline: true,
             },
           )

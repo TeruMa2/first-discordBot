@@ -6,8 +6,9 @@ import { rule } from "./commands/rule.js";
 import { apply } from "./commands/apply.js";
 import { omikuji } from "./commands/omikuji.js";
 import { quest } from "./commands/quest.js";
+import { status } from "./commands/status.js";
 
-const commandList = [ping, clear, rule, apply, omikuji, quest];
+const commandList = [ping, clear, rule, apply, omikuji, quest, status];
 const commands = commandList.map((cmd) => cmd.data.toJSON());
 
 const rest = new REST().setToken(process.env.DISCORD_TOKEN!);

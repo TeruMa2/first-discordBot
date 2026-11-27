@@ -5,6 +5,7 @@ import {
   TextChannel,
   PermissionFlagsBits,
 } from "discord.js";
+import { logSecurityEvent } from "./db.js";
 
 /**
  * サーバーのセキュリティ監視（イベントリスナー）を登録する関数
@@ -42,6 +43,12 @@ export function startSecurityMonitor(client: Client): void {
       if (!adminChannel) return;
 
       if (accountAgeDays < SUSPICIOUS_DAYS) {
+        logSecurityEvent(
+          member.id,
+          member.user.tag,
+          "NEW_ACCOUNT",
+          `アカウント作成から${accountAgeDays}日で参加`,
+        );
         // 黄色アラート：作成されたばかりのアカウント
         const warnEmbed = new EmbedBuilder()
           .setTitle("⚠️ 新規作成アカウントの参加を検知")
@@ -99,6 +106,12 @@ export function startSecurityMonitor(client: Client): void {
         const deletedContent = message.content;
         const channelName = (message.channel as TextChannel).name;
 
+        logSecurityEvent(
+          message.author.id,
+          message.author.tag,
+          "INVITE_LINK",
+          `#${channelName} で招待リンク投稿: ${deletedContent.slice(0, 100)}`,
+        );
         // 表のチャンネルから即座にメッセージを削除
         await message.delete();
 

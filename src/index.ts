@@ -16,6 +16,8 @@ import { omikuji } from "./commands/omikuji.js";
 import { quest } from "./commands/quest.js";
 import { startScheduler } from "./scheduler.js";
 import { startSecurityMonitor } from "./security.js";
+import { initDatabase } from "./db.js";
+import { status } from "./commands/status.js";
 
 const client = new Client({
   intents: [
@@ -28,12 +30,13 @@ const client = new Client({
 
 // コマンド一覧を保持するコレクション
 const commands = new Collection<string, Command>();
-[ping, clear, rule, apply, omikuji, quest].forEach((cmd) => {
+[ping, clear, rule, apply, omikuji, quest, status].forEach((cmd) => {
   commands.set(cmd.data.name, cmd);
 });
 
 client.once(Events.ClientReady, (readyClient) => {
   console.log(`🤖 Logged in as ${readyClient.user.tag}!`);
+  initDatabase();
   startScheduler(readyClient);
   startSecurityMonitor(readyClient);
 });

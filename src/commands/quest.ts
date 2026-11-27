@@ -7,6 +7,7 @@ import {
   ComponentType,
 } from "discord.js";
 import { Command } from "../types.js";
+import { addUserReward } from "../db.js";
 
 export const quest: Command = {
   data: new SlashCommandBuilder()
@@ -83,6 +84,12 @@ export const quest: Command = {
 
       // TRPG判定ルール
       if (dice <= 5) {
+        const user = addUserReward(
+          interaction.user.id,
+          interaction.user.displayName,
+          500,
+          1,
+        );
         title = "🌟 決定的成功（クリティカル）!!";
         color = 0xffd700;
         desc = `出目： **${dice}** / 目標値: **${targetRate}**\n奇跡な身のこなし！罠を完璧に解除し、幻の魔道書を手に入れた！`;
@@ -91,6 +98,12 @@ export const quest: Command = {
         color = 0xed4245;
         desc = `出目： **${dice}** / 目標値: **${targetRate}**\n大失敗！仕掛けが暴発し、毒針を喰らってほうほうの身体で逃げ出した...`;
       } else if (dice <= targetRate) {
+        const user = addUserReward(
+          interaction.user.id,
+          interaction.user.displayName,
+          100,
+          1,
+        );
         title = "🎯 成功！";
         color = 0x57f287;
         desc = `出目： **${dice}** / 目標値: **${targetRate}**\n見事に ${actionName} に成功！金貨 100枚 を獲得した。`;
